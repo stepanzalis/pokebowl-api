@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+#  app:
+#    build: src
+#    ports:
+#      - "5556:5556"
+#    environment:
+#      - DATABASE_URL=jdbc:postgresql://db:5556/tcg_db?sslmode=disable
+#      - DB_USER=stepanzalis
+#      - DB_PASS=stepanzalis
+#    depends_on:
+#      - db
+#      - redis
+
+  db:
+    image: postgres:16-alpine
+    container_name: tcg_postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=stepanzalis
+      - POSTGRES_PASSWORD=stepanzalis
+      - POSTGRES_DB=tcg_db
+    ports:
+      - "5433:5432"
+    volumes:
+      # Persist data so you don't lose it when container stops
+      - ./pg_data:/var/lib/postgresql/data
+
+    # PERFORMANCE TUNING FOR SPEED
+    # These flags optimize Postgres for a machine with ~4GB+ RAM
+    command: >
+      postgres
+      -c shared_buffers=512MB
+      -c effective_cache_size=1GB
+      -c work_mem=16MB
+      -c maintenance_work_mem=128MB
+      -c synchronous_commit=off 
+      -c max_connections=100
+
+  # Bonus: Setup Redis
+  redis:
+    image: redis:alpine
+    container_name: tcg_redis
+    ports:
+      - "6379:6379"
