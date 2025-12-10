@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.json)
     implementation(libs.postgresql)
+    implementation(libs.hikari)
 
     // -- TCGDex
     implementation(libs.tcgdex)

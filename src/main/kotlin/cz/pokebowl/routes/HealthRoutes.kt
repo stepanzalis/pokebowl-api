@@ -1,4 +1,4 @@
-package cz.routes
+package cz.pokebowl.routes
 
 import io.ktor.server.routing.*
 import io.ktor.server.response.*

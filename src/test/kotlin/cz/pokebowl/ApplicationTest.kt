@@ -1,4 +1,4 @@
-package cz.stepanzalis
+package cz.pokebowl
 
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -13,9 +13,9 @@ class ApplicationTest {
         application {
             module()
         }
-        client.get("/").apply {
+        // Our health check is at /api/v1/health
+        client.get("/api/v1/health").apply {
             assertEquals(HttpStatusCode.OK, status)
         }
     }
-
 }

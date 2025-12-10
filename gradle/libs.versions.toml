@@ -7,6 +7,7 @@ exposed-version = "0.61.0" # Or 1.0.0-rc if you are adventurous
 h2-version = "2.3.232"
 postgresql-version = "42.7.8"
 flyway-version = "11.19.0"
+hikari-version = "5.1.0"
 koin-version = "4.1.1" # Stable release
 fuzzywuzzy-version = "1.4.0" # Stable
 jackson-version = "2.20.1"
@@ -43,6 +44,7 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed-version" } # Needed for JSONB!
 
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql-version" }
+hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari-version" }
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway-version" }
 flyway-postgres = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway-version" }
 

@@ -1,4 +1,4 @@
-package cz.ext
+package cz.pokebowl.config
 
 import kotlin.time.Duration.Companion.seconds
 
