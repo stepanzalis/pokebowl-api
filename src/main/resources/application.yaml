@@ -7,9 +7,9 @@ ktor:
 
 storage:
     driverClassName: "org.postgresql.Driver"
-    jdbcUrl: ${DATABASE_URL:-jdbc:postgresql://localhost:5433/tcg_db}
-    username: ${DB_USER:-stepanzalis}
-    password: ${DB_PASS:-stepanzalis}
+    jdbcUrl: ${DATABASE_URL:jdbc:postgresql://localhost:5433/tcg_db}
+    username: ${DB_USER:stepanzalis}
+    password: ${DB_PASS:stepanzalis}
     maximumPoolSize: 10
     isAutoCommit: false
     transactionIsolation: "TRANSACTION_REPEATABLE_READ"
