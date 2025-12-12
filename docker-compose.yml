@@ -1,17 +1,17 @@
 version: '3.8'
 
 services:
-#  app:
-#    build: src
-#    ports:
-#      - "5556:5556"
-#    environment:
-#      - DATABASE_URL=jdbc:postgresql://db:5556/tcg_db?sslmode=disable
-#      - DB_USER=stepanzalis
-#      - DB_PASS=stepanzalis
-#    depends_on:
-#      - db
-#      - redis
+  app:
+    build: src
+    ports:
+      - "5556:5556"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://db:5556/tcg_db?sslmode=disable
+      - DB_USER=stepanzalis
+      - DB_PASS=stepanzalis
+    depends_on:
+      - db
+      - redis
 
   db:
     image: postgres:16-alpine
