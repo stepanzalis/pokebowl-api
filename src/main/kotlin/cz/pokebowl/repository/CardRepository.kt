@@ -45,7 +45,7 @@ class CardRepository {
             SortBy.AVG_PRICE -> CardsTable.avgPrice
             SortBy.NAME -> CardsTable.name
         }
-        
+
         val order = when (sortOrder) {
             SortOrder.DESCENDING -> org.jetbrains.exposed.sql.SortOrder.DESC
             SortOrder.ASCENDING -> org.jetbrains.exposed.sql.SortOrder.ASC

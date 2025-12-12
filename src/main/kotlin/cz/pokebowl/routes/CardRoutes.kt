@@ -1,5 +1,7 @@
 package cz.pokebowl.routes
 
+import cz.pokebowl.domain.dto.SortBy
+import cz.pokebowl.domain.dto.SortOrder
 import cz.pokebowl.service.CardService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.*
@@ -23,12 +25,8 @@ fun Route.cardRoutes() {
     get("/cards") {
         val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 1
         val pageSize = call.request.queryParameters["pageSize"]?.toIntOrNull() ?: 20
-        val sortBy = call.request.queryParameters["sortBy"]?.let { 
-            try { cz.pokebowl.domain.dto.SortBy.valueOf(it.uppercase()) } catch (e: Exception) { null }
-        } ?: cz.pokebowl.domain.dto.SortBy.NAME
-        val sortOrder = call.request.queryParameters["sortOrder"]?.let {
-            try { cz.pokebowl.domain.dto.SortOrder.valueOf(it.uppercase()) } catch (e: Exception) { null }
-        } ?: cz.pokebowl.domain.dto.SortOrder.ASCENDING
+        val sortBy = SortBy.fromStringOrNull(call.request.queryParameters["sortBy"]) ?: SortBy.NAME
+        val sortOrder = SortOrder.fromStringOrNull(call.request.queryParameters["sortOrder"]) ?: SortOrder.ASCENDING
         val minPrice = call.request.queryParameters["minPrice"]?.toDoubleOrNull()
         val maxPrice = call.request.queryParameters["maxPrice"]?.toDoubleOrNull()
 

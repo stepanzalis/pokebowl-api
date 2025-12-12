@@ -13,6 +13,7 @@ fuzzywuzzy-version = "1.4.0" # Stable
 jackson-version = "2.20.1"
 shadow-version = "8.3.6"
 tcgdex-version = "2.0.2"
+jedis-version = "5.2.0"
 
 [libraries]
 # KTOR
@@ -54,6 +55,7 @@ fuzzywuzzy = { module = "me.xdrop:fuzzywuzzy", version.ref = "fuzzywuzzy-version
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson-version" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson-version" }
 tcgdex = { module = "net.tcgdex:java-sdk", version.ref = "tcgdex-version"}
+jedis = { module = "redis.clients:jedis", version.ref = "jedis-version" }
 
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin-version" }
 

@@ -1,15 +1,20 @@
 ktor:
-    application:
-        modules:
-            - cz.pokebowl.ApplicationKt.module
-    deployment:
-        port: 8080
+  application:
+    modules:
+      - cz.pokebowl.ApplicationKt.module
+  deployment:
+    port: 8080
 
 storage:
-    driverClassName: "org.postgresql.Driver"
-    jdbcUrl: ${DATABASE_URL:jdbc:postgresql://localhost:5433/tcg_db}
-    username: ${DB_USER:stepanzalis}
-    password: ${DB_PASS:stepanzalis}
-    maximumPoolSize: 10
-    isAutoCommit: false
-    transactionIsolation: "TRANSACTION_REPEATABLE_READ"
+  driverClassName: 'org.postgresql.Driver'
+  jdbcUrl: ${DATABASE_URL:jdbc:postgresql://localhost:5433/tcg_db}
+  username: ${DB_USER:stepanzalis}
+  password: ${DB_PASS:stepanzalis}
+  maximumPoolSize: 10
+  isAutoCommit: false
+  transactionIsolation: 'TRANSACTION_REPEATABLE_READ'
+
+redis:
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+  ttlSeconds: 300

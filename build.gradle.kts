@@ -51,6 +51,9 @@ dependencies {
     // -- TCGDex
     implementation(libs.tcgdex)
 
+    // -- Redis Cache
+    implementation(libs.jedis)
+
     // --- Migrations (Flyway) ---
     implementation(libs.flyway.core)
     implementation(libs.flyway.postgres)

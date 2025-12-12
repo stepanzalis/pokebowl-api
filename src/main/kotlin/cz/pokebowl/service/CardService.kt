@@ -10,11 +10,20 @@ import kotlin.math.ceil
 class CardService(
     private val seriesRepository: SeriesRepository,
     private val setRepository: SetRepository,
-    private val cardRepository: CardRepository
+    private val cardRepository: CardRepository,
+    private val cacheService: CacheService
 ) {
+    companion object {
+        private const val CACHE_KEY_SERIES_WITH_SETS = "series_with_sets"
+        private const val CACHE_KEY_CARDS_PREFIX = "cards_paginated"
+    }
+
     fun getSeriesWithSets(): List<SeriesWithSetsResponse> {
+        // Try cache first
+        cacheService.get<List<SeriesWithSetsResponse>>(CACHE_KEY_SERIES_WITH_SETS)?.let { return it }
+
         val allSeries = seriesRepository.findAll()
-        return allSeries.map { series ->
+        val result = allSeries.map { series ->
             val sets = setRepository.findBySeriesId(series.id)
             SeriesWithSetsResponse(
                 id = series.id,
@@ -32,6 +41,9 @@ class CardService(
                 }
             )
         }
+
+        cacheService.set(CACHE_KEY_SERIES_WITH_SETS, result)
+        return result
     }
 
     fun getCardsBySet(setId: String): List<CardResponse> {
@@ -46,17 +58,25 @@ class CardService(
         minPrice: Double?,
         maxPrice: Double?
     ): PaginatedResponse<CardResponse> {
+        val cacheKey = "$CACHE_KEY_CARDS_PREFIX:$page:$pageSize:$sortBy:$sortOrder:$minPrice:$maxPrice"
+
+        // Try cache first
+        cacheService.get<PaginatedResponse<CardResponse>>(cacheKey)?.let { return it }
+
         val cards = cardRepository.findPaginated(page, pageSize, sortBy, sortOrder, minPrice, maxPrice)
         val totalItems = cardRepository.count(minPrice, maxPrice)
         val totalPages = ceil(totalItems.toDouble() / pageSize).toInt()
 
-        return PaginatedResponse(
+        val result = PaginatedResponse(
             items = cards.map { it.toResponse() },
             page = page,
             pageSize = pageSize,
             totalItems = totalItems,
             totalPages = totalPages
         )
+
+        cacheService.set(cacheKey, result)
+        return result
     }
 
     private fun Card.toResponse() = CardResponse(

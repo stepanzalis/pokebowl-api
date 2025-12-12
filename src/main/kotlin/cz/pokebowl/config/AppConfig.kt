@@ -16,5 +16,13 @@ class AppConfig(config: ApplicationConfig) {
         val isAutoCommit = config.propertyOrNull("storage.isAutoCommit")?.getString()?.toBoolean() ?: false
         val transactionIsolation = config.propertyOrNull("storage.transactionIsolation")?.getString() ?: "TRANSACTION_REPEATABLE_READ"
     }
+
+    val redis = RedisConfig(config)
+
+    class RedisConfig(config: ApplicationConfig) {
+        val host = config.propertyOrNull("redis.host")?.getString() ?: "localhost"
+        val port = config.propertyOrNull("redis.port")?.getString()?.toInt() ?: 6379
+        val ttlSeconds = config.propertyOrNull("redis.ttlSeconds")?.getString()?.toLong() ?: 300L
+    }
 }
 

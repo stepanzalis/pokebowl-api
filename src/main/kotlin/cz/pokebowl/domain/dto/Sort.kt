@@ -2,13 +2,19 @@ package cz.pokebowl.domain.dto
 
 enum class SortOrder {
     ASCENDING,
-    DESCENDING
+    DESCENDING;
+
+    companion object {
+        fun fromStringOrNull(value: String?): SortOrder? =
+            entries.find { it.name.equals(value, ignoreCase = true) }
+    }
 }
 
 enum class SortBy {
-    AVG_PRICE, NAME
-}
+    AVG_PRICE, NAME;
 
-enum class SortDirection {
-    ASCENDING, DESCENDING
+    companion object {
+        fun fromStringOrNull(value: String?): SortBy? =
+            entries.find { it.name.equals(value, ignoreCase = true) }
+    }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import cz.pokebowl.repository.CardRepository
 import cz.pokebowl.repository.SeriesRepository
 import cz.pokebowl.repository.SetRepository
+import cz.pokebowl.service.CacheService
 import cz.pokebowl.service.CardService
 import cz.pokebowl.service.TCGDexService
 import io.ktor.client.HttpClient
@@ -18,6 +19,7 @@ import net.tcgdex.sdk.models.Card
 import net.tcgdex.sdk.models.SerieResume
 import net.tcgdex.sdk.models.SetResume
 import org.koin.dsl.module
+import redis.clients.jedis.JedisPool
 
 val appModule = module {
     single<HttpClient> {
@@ -50,7 +52,11 @@ val appModule = module {
     single { SetRepository() }
     single { CardRepository() }
 
+    // Redis Cache - using defaults, can be overridden via env vars if needed
+    single { JedisPool("localhost", 6379) }
+    single { CacheService(get(), 300L) }
+
     single { TCGDexService(get(), get(), get(), get(), get(), get()) }
-    single { CardService(get(), get(), get()) }
+    single { CardService(get(), get(), get(), get()) }
 }
 
