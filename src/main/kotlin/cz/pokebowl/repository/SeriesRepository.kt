@@ -2,6 +2,7 @@ package cz.pokebowl.repository
 
 import cz.pokebowl.domain.Series
 import cz.pokebowl.domain.SeriesTable
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
 
@@ -15,6 +16,16 @@ class SeriesRepository {
                     it[logo] = series.logo
                 }
             }
+        }
+    }
+
+    fun findAll(): List<Series> = transaction {
+        SeriesTable.selectAll().map { row ->
+            Series(
+                id = row[SeriesTable.id],
+                name = row[SeriesTable.name],
+                logo = row[SeriesTable.logo]
+            )
         }
     }
 }

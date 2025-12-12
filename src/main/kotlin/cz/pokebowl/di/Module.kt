@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import cz.pokebowl.repository.CardRepository
 import cz.pokebowl.repository.SeriesRepository
 import cz.pokebowl.repository.SetRepository
+import cz.pokebowl.service.CardService
 import cz.pokebowl.service.TCGDexService
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -50,5 +51,6 @@ val appModule = module {
     single { CardRepository() }
 
     single { TCGDexService(get(), get(), get(), get(), get(), get()) }
+    single { CardService(get(), get(), get()) }
 }
 
