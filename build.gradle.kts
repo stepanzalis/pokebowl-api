@@ -56,7 +56,6 @@ dependencies {
 
     // --- Migrations (Flyway) ---
     implementation(libs.flyway.core)
-    implementation(libs.flyway.postgres)
 
     // Jackson (Required by Flyway sometimes, or useful for other JSON needs)
     implementation(libs.jackson.databind)
