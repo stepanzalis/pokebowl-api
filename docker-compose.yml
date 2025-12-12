@@ -2,16 +2,20 @@ version: '3.8'
 
 services:
   app:
-    build: src
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "5556:5556"
     environment:
-      - DATABASE_URL=jdbc:postgresql://db:5556/tcg_db?sslmode=disable
+      # FIX 2: Connect to 'db' on internal port 5432 (not 5556)
+      - DATABASE_URL=jdbc:postgresql://db:5432/tcg_db?sslmode=disable
       - DB_USER=stepanzalis
       - DB_PASS=stepanzalis
     depends_on:
       - db
       - redis
+    restart: always
 
   db:
     image: postgres:16-alpine
@@ -21,14 +25,15 @@ services:
       - POSTGRES_USER=stepanzalis
       - POSTGRES_PASSWORD=stepanzalis
       - POSTGRES_DB=tcg_db
+    # Internal communication happens on 5432.
+    # This port mapping is only for external access (e.g. DBeaver from your laptop)
     ports:
       - "5433:5432"
     volumes:
-      # Persist data so you don't lose it when container stops
-      - ./pg_data:/var/lib/postgresql/data
+      # FIX 3: Use a named volume for better data persistence in Coolify
+      - postgres_data:/var/lib/postgresql/data
 
-    # PERFORMANCE TUNING FOR SPEED
-    # These flags optimize Postgres for a machine with ~4GB+ RAM
+    # Performance tuning (kept from your original)
     command: >
       postgres
       -c shared_buffers=512MB
@@ -38,9 +43,13 @@ services:
       -c synchronous_commit=off 
       -c max_connections=100
 
-  # Bonus: Setup Redis
   redis:
     image: redis:alpine
     container_name: tcg_redis
+    restart: always
     ports:
       - "6379:6379"
+
+# Define the volume at the bottom
+volumes:
+  postgres_data:
