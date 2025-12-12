@@ -5,10 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "5556:5556"
     environment:
-      # FIX 2: Connect to 'db' on internal port 5432 (not 5556)
       - DATABASE_URL=jdbc:postgresql://db:5432/tcg_db?sslmode=disable
       - DB_USER=stepanzalis
       - DB_PASS=stepanzalis
@@ -25,15 +22,12 @@ services:
       - POSTGRES_USER=stepanzalis
       - POSTGRES_PASSWORD=stepanzalis
       - POSTGRES_DB=tcg_db
-    # Internal communication happens on 5432.
-    # This port mapping is only for external access (e.g. DBeaver from your laptop)
+    # Keep this if you want to connect to DB via DBeaver from your laptop
+    # If this fails with "port allocated" too, change 5433 to 5434
     ports:
       - "5433:5432"
     volumes:
-      # FIX 3: Use a named volume for better data persistence in Coolify
       - postgres_data:/var/lib/postgresql/data
-
-    # Performance tuning (kept from your original)
     command: >
       postgres
       -c shared_buffers=512MB
@@ -47,9 +41,9 @@ services:
     image: redis:alpine
     container_name: tcg_redis
     restart: always
+    # You usually don't need this exposed to the internet, but acceptable for dev
     ports:
       - "6379:6379"
 
-# Define the volume at the bottom
 volumes:
   postgres_data:
