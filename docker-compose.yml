@@ -6,22 +6,19 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      # Use the internal service name "db"
+      # These variables are passed to your Kotlin Application
       - DATABASE_URL=jdbc:postgresql://db:5432/tcg_db?sslmode=disable
       - DB_USER=stepanzalis
       - DB_PASS=stepanzalis
-      # App still listens on 8080 INSIDE the container
       - PORT=8080
     depends_on:
       - db
       - redis
     restart: always
-    ports:
-      # HOST:CONTAINER
-      # We change the host port to 8081 to avoid conflict with Dev
-      - "8081:8080"
+    expose:
+      - "8080"
+
     healthcheck:
-      # Healthcheck happens INSIDE, so it stays on 8080
       test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8080/api/v1/health" ]
       interval: 10s
       timeout: 5s
@@ -34,9 +31,9 @@ services:
       - POSTGRES_USER=stepanzalis
       - POSTGRES_PASSWORD=stepanzalis
       - POSTGRES_DB=tcg_db
+
     ports:
-      # Changed to 5434 so it doesn't clash with Dev DB (5433)
-      - "5434:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     command: >
@@ -52,8 +49,7 @@ services:
     image: redis:alpine
     restart: always
     ports:
-      # Changed to 6380 so it doesn't clash with Dev Redis (6379)
-      - "6380:6379"
+      - "6379:6379"
 
 volumes:
   postgres_data:
