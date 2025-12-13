@@ -3,7 +3,7 @@ ktor:
     modules:
       - cz.pokebowl.ApplicationKt.module
   deployment:
-    port: 8080
+    port: 5556
 
 storage:
   driverClassName: 'org.postgresql.Driver'
