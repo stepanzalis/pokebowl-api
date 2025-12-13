@@ -9,21 +9,17 @@ services:
       - DATABASE_URL=jdbc:postgresql://db:5432/tcg_db?sslmode=disable
       - DB_USER=stepanzalis
       - DB_PASS=stepanzalis
-      - PORT=8080
+      - PORT=5556
     depends_on:
       - db
       - redis
     restart: always
 
     expose:
-      - "8080"
-
-    labels:
-      - "coolify.managed=true"
-      - "coolify.exposedPort=8080"
+      - "5556"
 
     healthcheck:
-      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost:8080/api/v1/health" ]
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost:5556/api/v1/health" ]
       interval: 10s
       timeout: 5s
       retries: 3
