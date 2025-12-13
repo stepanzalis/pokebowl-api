@@ -1,9 +1,9 @@
 package cz.pokebowl.routes
 
 import cz.pokebowl.config.AppConfig
+import cz.pokebowl.routes.plugins.RoutePlugins
 import cz.pokebowl.service.TCGDexService
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import org.koin.ktor.ext.inject
@@ -13,14 +13,7 @@ fun Route.adminRoutes() {
     val appConfig by inject<AppConfig>()
 
     route("/admin/sync") {
-        install(createRouteScopedPlugin("AdminAuthPlugin") {
-            onCall { call ->
-                val secret = call.request.headers["X-Admin-Secret"]
-                if (secret != appConfig.admin.secret) {
-                    call.respond(HttpStatusCode.Forbidden, "Invalid admin secret")
-                }
-            }
-        })
+        install(RoutePlugins.createAdminAuthPlugin(appConfig))
 
         post("/series") {
             try {
