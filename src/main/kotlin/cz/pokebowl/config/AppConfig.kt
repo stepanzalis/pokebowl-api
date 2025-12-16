@@ -30,13 +30,5 @@ class AppConfig(config: ApplicationConfig) {
     class AdminConfig(config: ApplicationConfig) {
         val secret = config.propertyOrNull("admin.secret")?.getString() ?: "admin-secret"
     }
-
-    val redis = RedisConfig(config)
-
-    class RedisConfig(config: ApplicationConfig) {
-        val host = config.propertyOrNull("redis.host")?.getString() ?: "localhost"
-        val port = config.propertyOrNull("redis.port")?.getString()?.toInt() ?: 6379
-        val ttlSeconds = config.propertyOrNull("redis.ttlSeconds")?.getString()?.toLong() ?: 300L
-    }
 }
 
