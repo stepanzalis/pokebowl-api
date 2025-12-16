@@ -29,4 +29,27 @@ class CacheService(
             // Log error but don't fail
         }
     }
+
+    fun invalidate(key: String) {
+        try {
+            jedisPool.resource.use { jedis ->
+                jedis.del(key)
+            }
+        } catch (e: Exception) {
+            // Log error but don't fail
+        }
+    }
+
+    fun invalidatePattern(pattern: String) {
+        try {
+            jedisPool.resource.use { jedis ->
+                val keys = jedis.keys(pattern)
+                if (keys.isNotEmpty()) {
+                    jedis.del(*keys.toTypedArray())
+                }
+            }
+        } catch (e: Exception) {
+            // Log error but don't fail
+        }
+    }
 }

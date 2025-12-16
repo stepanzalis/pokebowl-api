@@ -17,7 +17,6 @@ fun Application.configureDatabases(config: AppConfig) {
         maximumPoolSize = dbConfig.maximumPoolSize
         isAutoCommit = dbConfig.isAutoCommit
         transactionIsolation = dbConfig.transactionIsolation
-        minimumIdle = dbConfig.minimumIdleConnection
         validate()
     }
 
