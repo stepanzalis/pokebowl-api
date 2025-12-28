@@ -28,8 +28,10 @@ class CardRepository {
     }
 
     fun findBySetId(setId: String): List<Card> = transaction {
-        CardsTable.selectAll().where { CardsTable.setId eq setId }.map { row ->
-            rowToCard(row)
+        CardsTable.selectAll()
+            .where { CardsTable.setId eq setId }
+            .sortedBy { CardsTable.localId }.map { row ->
+                rowToCard(row)
         }
     }
 
