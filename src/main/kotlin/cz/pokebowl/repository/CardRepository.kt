@@ -33,6 +33,13 @@ class CardRepository {
         }
     }
 
+    fun findByIds(ids: List<String>): List<Card> = transaction {
+        if (ids.isEmpty()) return@transaction emptyList()
+        CardsTable.selectAll().where { CardsTable.id inList ids }.map { row ->
+            rowToCard(row)
+        }
+    }
+
     fun findPaginated(
         page: Int,
         pageSize: Int,

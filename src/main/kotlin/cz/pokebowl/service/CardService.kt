@@ -50,6 +50,10 @@ class CardService(
         return cardRepository.findBySetId(setId).map { it.toResponse() }
     }
 
+    fun getCardsByIds(ids: List<String>): List<CardResponse> {
+        return cardRepository.findByIds(ids).map { it.toResponse() }
+    }
+
     fun getCardsPaginated(
         page: Int,
         pageSize: Int,

@@ -1,9 +1,11 @@
 package cz.pokebowl.routes
 
+import cz.pokebowl.domain.dto.CardsByIdsRequest
 import cz.pokebowl.domain.dto.SortBy
 import cz.pokebowl.domain.dto.SortOrder
 import cz.pokebowl.service.CardService
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
@@ -18,6 +20,16 @@ fun Route.cardRoutes() {
             mapOf("error" to "setId is required")
         )
         val cards = cardService.getCardsBySet(setId)
+        call.respond(cards)
+    }
+
+    // Batch get cards by IDs
+    post("/cards/batch") {
+        val request = call.receive<CardsByIdsRequest>()
+        if (request.ids.isEmpty()) {
+            return@post call.respond(HttpStatusCode.BadRequest, mapOf("error" to "ids list cannot be empty"))
+        }
+        val cards = cardService.getCardsByIds(request.ids)
         call.respond(cards)
     }
 

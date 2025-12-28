@@ -37,6 +37,11 @@ data class CardResponse(
     val data: JsonObject
 )
 
+@Serializable
+data class CardsByIdsRequest(
+    val ids: List<String>
+)
+
 // --- Pagination ---
 
 @Serializable
