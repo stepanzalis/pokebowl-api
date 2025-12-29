@@ -4,7 +4,9 @@ import cz.pokebowl.domain.Card
 import cz.pokebowl.domain.CardsTable
 import cz.pokebowl.domain.dto.SortBy
 import cz.pokebowl.domain.dto.SortOrder
+import org.jetbrains.exposed.sql.LowerCase
 import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
@@ -40,6 +42,23 @@ class CardRepository {
         CardsTable.selectAll().where { CardsTable.id inList ids }.map { row ->
             rowToCard(row)
         }
+    }
+
+    fun findByName(name: String): List<Card> = transaction {
+        CardsTable.selectAll()
+            .where { LowerCase(CardsTable.name) eq name.lowercase() }
+            .map { row -> rowToCard(row) }
+    }
+
+    fun search(query: String, limit: Int = 50): List<Card> = transaction {
+        val lowerQuery = "%${query.lowercase()}%"
+        CardsTable.selectAll()
+            .where { 
+                (LowerCase(CardsTable.name) like lowerQuery) or 
+                (LowerCase(CardsTable.localId) like lowerQuery) 
+            }
+            .limit(limit)
+            .map { row -> rowToCard(row) }
     }
 
     fun findPaginated(

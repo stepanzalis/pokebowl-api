@@ -33,6 +33,27 @@ fun Route.cardRoutes() {
         call.respond(cards)
     }
 
+    // Get all cards with the same name (e.g., all "Pikachu" cards)
+    get("/cards/name/{name}") {
+        val name = call.parameters["name"] ?: return@get call.respond(
+            HttpStatusCode.BadRequest,
+            mapOf("error" to "name is required")
+        )
+        val cards = cardService.getCardsByName(name)
+        call.respond(cards)
+    }
+
+    // Search cards by name or card number (localId)
+    get("/cards/search") {
+        val query = call.request.queryParameters["q"] ?: return@get call.respond(
+            HttpStatusCode.BadRequest,
+            mapOf("error" to "query parameter 'q' is required")
+        )
+        val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
+        val cards = cardService.searchCards(query, limit)
+        call.respond(cards)
+    }
+
     // Paginated cards with filtering and sorting
     get("/cards") {
         val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 1

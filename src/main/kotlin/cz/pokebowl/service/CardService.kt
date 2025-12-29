@@ -54,6 +54,14 @@ class CardService(
         return cardRepository.findByIds(ids).map { it.toResponse() }
     }
 
+    fun getCardsByName(name: String): List<CardResponse> {
+        return cardRepository.findByName(name).map { it.toResponse() }
+    }
+
+    fun searchCards(query: String, limit: Int = 50): List<CardResponse> {
+        return cardRepository.search(query, limit).map { it.toResponse() }
+    }
+
     fun getCardsPaginated(
         page: Int,
         pageSize: Int,
